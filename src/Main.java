@@ -14,8 +14,11 @@ public class Main {
             System.out.println("1 - Создать задачу");
             System.out.println("2 - Вывести список всех задач, подзадач и эпиков");
             System.out.println("3 - Операции со статусами задач");
-            System.out.println("4 - Удаление задачи");
-            System.out.println("5 - Обновление задачи");
+            System.out.println("4 - Обновление задачи");
+            System.out.println("5 - Удалить задачу по id");
+            System.out.println("6 - Удалить все эпики");
+            System.out.println("7 - Удалить все задачи");
+            System.out.println("8 - Удалить все подзадачи");
             System.out.println("0 - Выйти из программы");
             System.out.print("Выберите действие: ");
 
@@ -33,10 +36,22 @@ public class Main {
                     manageTaskStatus();
                     break;
                 case 4:
-                    deleteTask();
+                    updateTaskById();
                     break;
                 case 5:
-                    updateTaskById();
+                    deleteTask();
+                    break;
+                case 6:
+                    taskManager.deleteAllEpics();
+                    System.out.println("Все эпики успешно удалены.");
+                    break;
+                case 7:
+                    taskManager.deleteAllTasks();
+                    System.out.println("Все задачи успешно удалены.");
+                    break;
+                case 8:
+                    taskManager.deleteAllSubtasks();
+                    System.out.println("Все подзадачи успешно удалены.");
                     break;
                 case 0:
                     System.out.println("Программа завершена.");
@@ -85,10 +100,27 @@ public class Main {
     }
 
     private static void printAllTasks() {
+        // Вывод обычных задач
         List<Task> allTasks = taskManager.getAllTasks();
-        System.out.println("\n===== Список всех задач =====");
+        System.out.println("\n===== Список всех обычных задач =====");
         for (Task task : allTasks) {
-            System.out.println(task);
+            if (!(task instanceof Epic) && !(task instanceof Subtask)) {
+                System.out.println(task);
+            }
+        }
+
+        // Вывод эпиков
+        List<Epic> allEpics = taskManager.getAllEpics();
+        System.out.println("\n===== Список всех эпиков =====");
+        for (Epic epic : allEpics) {
+            System.out.println(epic);
+        }
+
+        // Вывод подзадач
+        List<Subtask> allSubtasks = taskManager.getAllSubtasks();
+        System.out.println("\n===== Список всех подзадач =====");
+        for (Subtask subtask : allSubtasks) {
+            System.out.println(subtask);
         }
     }
 
