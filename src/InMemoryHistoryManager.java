@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private List<Task> history = new LinkedList<>();
+    private final List<Task> history = new LinkedList<>();
 
     @Override
     public void add(Task task) {
