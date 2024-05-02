@@ -10,7 +10,7 @@ public interface TaskManager {
     List<Task> getAllTasks();
 
     List<Epic> getAllEpics();
-    
+
     List<Subtask> getAllSubtasks();
 
     void deleteTask(int id);
