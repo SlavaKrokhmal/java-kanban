@@ -1,4 +1,5 @@
 import java.util.Objects;
+
 public class Task {
     private String name;
     private String description;
@@ -22,6 +23,7 @@ public class Task {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -29,6 +31,7 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
