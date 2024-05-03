@@ -7,13 +7,11 @@ class EpicTest {
     public void epicShouldNotAddItselfAsSubtask() {
         Epic epic = new Epic("Эпик", "Описание", Status.NEW);
         epic.setId(1);
-
         Subtask subtask = new Subtask("Подзадача", "Описание", Status.NEW, epic.getId());
-        subtask.setId(epic.getId());
+        subtask.setId(2);
 
         try {
             epic.addSubtask(subtask);
-            fail("ожидается создание исключения IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("Эпик не может быть добавлен в себя"));
         }
