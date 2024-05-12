@@ -6,8 +6,8 @@ class InMemoryHistoryManagerTest {
     @Test
     public void addingTasksToHistoryShouldPreservePreviousVersion() {
         HistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE);
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
         task1.setId(1);
         task2.setId(2);
         historyManager.add(task1);
@@ -19,8 +19,8 @@ class InMemoryHistoryManagerTest {
     @Test
     public void testRemoveTaskFromHistory() {
         HistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE);
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
         task1.setId(1);
         task2.setId(2);
 

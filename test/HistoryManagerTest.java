@@ -11,8 +11,8 @@ class HistoryManagerTest {
     @BeforeEach
     void setUp() {
         historyManager = Managers.getDefaultHistory();
-        task1 = new Task("Задача1", "Описание1", Status.NEW);
-        task2 = new Task("Задача2", "Описание2", Status.NEW);
+        task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
+        task2 = new Task("Задача2", "Описание2", Status.NEW, TaskType.TASK);
 
         task1.setId(1);
         task2.setId(2);

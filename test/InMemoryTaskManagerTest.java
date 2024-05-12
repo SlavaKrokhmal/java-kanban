@@ -12,14 +12,14 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void testCreateAndGetTask() {
-        Task task = new Task("Задача", "Описание", Status.NEW);
+        Task task = new Task("Задача", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         Assertions.assertNotNull(taskManager.getTask(task.getId()));
     }
 
     @Test
     public void testUpdateTask() {
-        Task task = new Task("Старое название", "Описание", Status.NEW);
+        Task task = new Task("Старое название", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         task.setName("Новое название");
         taskManager.updateTask(task);
@@ -28,7 +28,7 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void testDeleteTask() {
-        Task task = new Task("На удаление", "Описание", Status.NEW);
+        Task task = new Task("На удаление", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         Assertions.assertNotNull(taskManager.getTask(task.getId()));
         taskManager.deleteTask(task.getId());
@@ -37,8 +37,8 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void testGetAllTasks() {
-        taskManager.createTask(new Task("Задача1", "Описание", Status.NEW));
-        taskManager.createTask(new Task("Задача2", "Описание", Status.NEW));
+        taskManager.createTask(new Task("Задача1", "Описание", Status.NEW, TaskType.TASK));
+        taskManager.createTask(new Task("Задача2", "Описание", Status.NEW, TaskType.TASK));
         Assertions.assertEquals(2, taskManager.getAllTasks().size());
     }
 }
