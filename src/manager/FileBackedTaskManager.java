@@ -1,3 +1,10 @@
+package manager;
+
+import exceptions.ManagerSaveException;
+import model.Status;
+import model.Task;
+import model.TaskType;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -5,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private File file;
+    private final File file;
 
     private static final String FILE_PATH = "E:\\tasks.txt";
 
@@ -23,7 +30,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 loadFromFile(this.file);
             }
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка инициализации файла", e);
+            throw new ManagerSaveException("Ошибка инициализации файла", e);
         }
     }
 
@@ -65,7 +72,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     .collect(Collectors.joining("\n"));
             Files.writeString(file.toPath(), data);
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при сохранении задач", e);
+            throw new ManagerSaveException("Ошибка при сохранении задач", e);
         }
     }
 

@@ -1,3 +1,7 @@
+import manager.FileBackedTaskManager;
+import model.Status;
+import model.Task;
+import model.TaskType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
@@ -19,7 +23,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testUpdateTask() {
+    void updatingTaskReflectsChanges() {
         Task task = new Task("Старое название", "Старое описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         task.setName("Новое название");
@@ -32,7 +36,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testDeleteTask() {
+    void deletingTaskShouldResultInNull() {
         Task task = new Task("Задача", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         taskManager.deleteTask(1);

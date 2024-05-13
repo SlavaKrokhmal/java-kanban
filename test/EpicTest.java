@@ -1,4 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import model.Epic;
+import model.Status;
+import model.Subtask;
 import org.junit.jupiter.api.Test;
 class EpicTest {
 
@@ -17,7 +21,7 @@ class EpicTest {
         }
     }
     @Test
-    void testEqualEpics() {
+    void equalEpicsShouldBeEqual() {
         Epic epic1 = new Epic("Эпик1", "Описание1", Status.NEW);
         Epic epic2 = new Epic("Эпик2", "Описание2", Status.DONE);
         epic1.setId(3);

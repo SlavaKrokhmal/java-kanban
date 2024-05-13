@@ -1,3 +1,8 @@
+import factory.Managers;
+import history.HistoryManager;
+import model.Status;
+import model.Task;
+import model.TaskType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +24,7 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testHistoryPreservesPreviousVersion() {
+    void addingToHistoryShouldPreservePreviousVersion() {
         historyManager.add(task1);
         assertEquals(1, historyManager.getHistory().size(), "в истории должна быть 1 задача после добавления");
 

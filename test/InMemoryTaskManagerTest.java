@@ -1,3 +1,7 @@
+import manager.InMemoryTaskManager;
+import model.Status;
+import model.Task;
+import model.TaskType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -11,14 +15,14 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void testCreateAndGetTask() {
+    public void createAndGetTaskShouldReturnNotNull() {
         Task task = new Task("Задача", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         Assertions.assertNotNull(taskManager.getTask(task.getId()));
     }
 
     @Test
-    public void testUpdateTask() {
+    public void updatingTaskShouldReflectChanges() {
         Task task = new Task("Старое название", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         task.setName("Новое название");
@@ -27,7 +31,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void testDeleteTask() {
+    public void deletingTaskShouldResultInNull() {
         Task task = new Task("На удаление", "Описание", Status.NEW, TaskType.TASK);
         taskManager.createTask(task);
         Assertions.assertNotNull(taskManager.getTask(task.getId()));
@@ -36,7 +40,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void testGetAllTasks() {
+    public void getAllTasksShouldReturnCorrectTaskCount() {
         taskManager.createTask(new Task("Задача1", "Описание", Status.NEW, TaskType.TASK));
         taskManager.createTask(new Task("Задача2", "Описание", Status.NEW, TaskType.TASK));
         Assertions.assertEquals(2, taskManager.getAllTasks().size());
