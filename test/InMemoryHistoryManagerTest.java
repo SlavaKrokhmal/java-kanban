@@ -7,13 +7,18 @@ import model.Status;
 import model.Task;
 import model.TaskType;
 import org.junit.jupiter.api.Test;
+import java.time.LocalDateTime;
+import java.time.Duration;
+
 class InMemoryHistoryManagerTest {
 
     @Test
     public void addingTasksToHistoryShouldPreservePreviousVersion() {
         HistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
+        LocalDateTime startTime = LocalDateTime.now();
+        Duration duration = Duration.ofHours(1);
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK, startTime, duration);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK, startTime, duration);
         task1.setId(1);
         task2.setId(2);
         historyManager.add(task1);
@@ -25,8 +30,10 @@ class InMemoryHistoryManagerTest {
     @Test
     public void removingTaskShouldRemoveItFromHistory() {
         HistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
+        LocalDateTime startTime = LocalDateTime.now();
+        Duration duration = Duration.ofHours(1);
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK, startTime, duration);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK, startTime, duration);
         task1.setId(1);
         task2.setId(2);
 

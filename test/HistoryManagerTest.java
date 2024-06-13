@@ -6,6 +6,8 @@ import model.TaskType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.time.Duration;
 
 class HistoryManagerTest {
 
@@ -16,8 +18,10 @@ class HistoryManagerTest {
     @BeforeEach
     void setUp() {
         historyManager = Managers.getDefaultHistory();
-        task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
-        task2 = new Task("Задача2", "Описание2", Status.NEW, TaskType.TASK);
+        LocalDateTime startTime = LocalDateTime.now();
+        Duration duration = Duration.ofHours(1);
+        task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK, startTime, duration);
+        task2 = new Task("Задача2", "Описание2", Status.NEW, TaskType.TASK, startTime, duration);
 
         task1.setId(1);
         task2.setId(2);
@@ -39,4 +43,20 @@ class HistoryManagerTest {
         assertEquals(2, historyManager.getHistory().size(), "в истории должна быть 2 задача после добавления второй.");
         assertEquals(task2, historyManager.getHistory().get(1), "Вторая задача должна равняться добавленной.");
     }
+
+    @Test
+    void shouldRemoveTaskFromHistory() {
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.remove(task1.getId());
+        assertFalse(historyManager.getHistory().contains(task1), "Задача 1 должна быть удалена из истории.");
+        assertTrue(historyManager.getHistory().contains(task2), "Задача 2 должна оставаться в истории.");
+    }
+
+    @Test
+    void accessingEmptyHistoryShouldReturnEmptyList() {
+        assertTrue(historyManager.getHistory().isEmpty(), "Доступ к пустой истории должен возвращать пустой список.");
+    }
+
+
 }

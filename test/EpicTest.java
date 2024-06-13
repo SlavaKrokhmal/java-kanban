@@ -1,5 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.time.Duration;
+
 import model.Epic;
 import model.Status;
 import model.Subtask;
@@ -11,7 +14,8 @@ class EpicTest {
     public void epicShouldNotAddItselfAsSubtask() {
         Epic epic = new Epic("Эпик", "Описание", Status.NEW);
         epic.setId(1);
-        Subtask subtask = new Subtask("Подзадача", "Описание", Status.NEW, epic.getId());
+        LocalDateTime startTime = LocalDateTime.now();
+        Subtask subtask = new Subtask("Подзадача", "Описание", Status.NEW, epic.getId(), startTime, Duration.ofHours(1));
         subtask.setId(2);
 
         try {

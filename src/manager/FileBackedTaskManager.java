@@ -4,12 +4,13 @@ import exceptions.ManagerSaveException;
 import model.Status;
 import model.Task;
 import model.TaskType;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -33,6 +34,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка инициализации файла", e);
         }
     }
+
+
 
     @Override
     public void createTask(Task task) {
@@ -64,6 +67,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+
     private void save() {
         try {
             List<Task> tasks = getAllTasks();
@@ -77,7 +81,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String taskToString(Task task) {
-        return task.getType() + "," + task.getId() + "," + task.getName() + "," + task.getDescription() + "," + task.getStatus();
+        Duration duration = task.getDuration();
+        long minutes = (duration != null) ? duration.toMinutes() : 0;
+
+        return task.getType() + "," + task.getId() + "," + task.getName() + "," + task.getDescription() + ","
+                + task.getStatus() + "," + task.getStartTime() + "," + minutes;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) throws IOException {
@@ -98,7 +106,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = parts[2];
         String description = parts[3];
         Status status = Status.valueOf(parts[4]);
-        Task task = new Task(name, description, status, type);
+        LocalDateTime startTime = LocalDateTime.parse(parts[5]);
+        Duration duration = Duration.ofMinutes(Long.parseLong(parts[6]));
+        Task task = new Task(name, description, status, type, startTime, duration);
         task.setId(id);
         return task;
     }

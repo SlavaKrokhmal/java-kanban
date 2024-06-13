@@ -11,6 +11,9 @@ import model.Status;
 
 
 import java.util.*;
+import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
 
 
 public class Main {
@@ -163,10 +166,28 @@ public class Main {
             return;
         }
 
+        System.out.print("Введите время начала задачи (yyyy-MM-ddTHH:mm): ");
+        String dateTimeInput = scanner.nextLine();
+
+        LocalDateTime startTime;
+        try {
+            if (dateTimeInput.isEmpty()) {
+                System.out.println("Время начала задачи не введено. Создание задачи отменено.");
+                return;
+            }
+            startTime = LocalDateTime.parse(dateTimeInput);
+        } catch (DateTimeParseException e) {
+            System.out.println("Некорректный ввод времени начала задачи. Пожалуйста, введите время в формате yyyy-MM-ddTHH:mm. Создание задачи отменено.");
+            return;
+        }
+        System.out.print("Введите продолжительность задачи в минутах: ");
+        long durationMinutes = scanner.nextLong();
+        scanner.nextLine();
+
         Task task = null;
         switch (typeChoice) {
             case 1:
-                task = new Task(name, description, status, TaskType.TASK);
+                task = new Task(name, description, status, TaskType.TASK, startTime, Duration.ofMinutes(durationMinutes));
                 break;
             case 2:
                 task = new Epic(name, description, status);
@@ -175,7 +196,7 @@ public class Main {
                 System.out.print("Введите идентификатор эпика: ");
                 int epicId = scanner.nextInt();
                 scanner.nextLine();
-                task = new Subtask(name, description, status, epicId);
+                task = new Subtask(name, description, status, epicId, startTime, Duration.ofMinutes(durationMinutes));
                 break;
             default:
                 System.out.println("Неправильный выбор. Создание задачи отменено.");
@@ -189,7 +210,7 @@ public class Main {
 
     private static void printAllTasks() {
         System.out.println("Какую задачу вы хотите вывести?");
-        System.out.println("1 - Вывести список всех задач, эпиков и подзадач");
+        System.out.println("1 - Вывести список всех задач, эпиков и подзадач по приоритету (время начала)");
         System.out.println("2 - Вывести задачу по ID");
         System.out.println("3 - Вывести эпик по ID");
         System.out.println("4 - Вывести подзадачу по ID");
@@ -200,7 +221,12 @@ public class Main {
 
         switch (option) {
             case 1:
-                taskManager.getAllTasks().forEach(System.out::println);
+                List<Task> sortedTasks = ((InMemoryTaskManager) taskManager).getPrioritizedTasks();
+                if (sortedTasks.isEmpty()) {
+                    System.out.println("Список задач пуст.");
+                } else {
+                    sortedTasks.forEach(System.out::println);
+                }
                 break;
             case 2:
                 System.out.print("Введите ID задачи для вывода: ");
@@ -289,12 +315,14 @@ public class Main {
         }
 
         Task newTask;
+        Duration duration = oldTask.getDuration();
+        LocalDateTime startTime = oldTask.getStartTime();
         if (oldTask instanceof Epic) {
             newTask = new Epic(name, description, status);
         } else if (oldTask instanceof Subtask) {
-            newTask = new Subtask(name, description, status, ((Subtask) oldTask).getEpicId());
+            newTask = new Subtask(name, description, status, ((Subtask) oldTask).getEpicId(), startTime, duration);
         } else {
-            newTask = new Task(name, description, status, TaskType.TASK);
+            newTask = new Task(name, description, status, TaskType.TASK, startTime, duration);
         }
         newTask.setId(taskId);
 
