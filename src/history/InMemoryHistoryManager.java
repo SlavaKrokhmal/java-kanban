@@ -1,3 +1,8 @@
+package history;
+
+import utils.Node;
+import model.Task;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {

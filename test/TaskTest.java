@@ -1,12 +1,15 @@
+import model.Status;
+import model.Task;
+import model.TaskType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
 
     @Test
-    void testEqualTasks() {
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE);
+    void equalTasksShouldBeEqual() {
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
         task1.setId(1);
         task2.setId(1);
 
@@ -17,9 +20,9 @@ class TaskTest {
 
 
     @Test
-    void testNotEqualTasks() {
-        Task task1 = new Task("Задача1", "Описание1", Status.NEW);
-        Task task2 = new Task("Задача2", "Описание2", Status.DONE);
+    void notEqualTasksShouldNotBeEqual() {
+        Task task1 = new Task("Задача1", "Описание1", Status.NEW, TaskType.TASK);
+        Task task2 = new Task("Задача2", "Описание2", Status.DONE, TaskType.TASK);
         task1.setId(1);
         task2.setId(2);
 

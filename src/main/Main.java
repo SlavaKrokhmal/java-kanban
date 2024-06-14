@@ -1,8 +1,22 @@
+package main;
+
+import manager.FileBackedTaskManager;
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import model.TaskType;
+import model.Status;
+
+
 import java.util.*;
+
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final TaskManager taskManager = new InMemoryTaskManager();
+    private static TaskManager taskManager = new InMemoryTaskManager();
+
 
     public static void main(String[] args) {
         printMenu();
@@ -17,6 +31,7 @@ public class Main {
             System.out.println("4 - Обновление задачи");
             System.out.println("5 - Удалить задачу");
             System.out.println("6 - История просмотренных задач");
+            System.out.println("7 - Загрузить из файла");
             System.out.println("0 - Выйти из программы");
             System.out.print("Выберите действие: ");
 
@@ -47,6 +62,9 @@ public class Main {
                 case 6:
                     printTaskHistory();
                     break;
+                case 7:
+                    loadTasksFromFile();
+                    break;
                 case 0:
                     System.out.println("Программа завершена.");
                     return;
@@ -68,6 +86,15 @@ public class Main {
         }
     }
 
+    private static void loadTasksFromFile() {
+        try {
+            taskManager = new FileBackedTaskManager();
+            System.out.println("Задачи успешно загружены из файла.");
+        } catch (Exception e) {
+            System.out.println("Произошла ошибка при загрузке задач: " + e.getMessage());
+        }
+    }
+
     private static void deleteTaskMenu() {
         System.out.println("Какую задачу вы хотите удалить?");
         System.out.println("1 - Удалить задачу по id");
@@ -79,17 +106,34 @@ public class Main {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        if (choice >= 1 && choice <= 3) {
-            System.out.print("Введите ID для удаления: ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
-            taskManager.deleteTask(id);
-            System.out.println("Задача удалена.");
-        } else if (choice == 4) {
-            taskManager.deleteAllTasks();
-            System.out.println("Все задачи, эпики и подзадачи удалены.");
-        } else {
-            System.out.println("Неверный выбор. Попробуйте снова.");
+        switch (choice) {
+            case 1:
+                System.out.print("Введите ID для удаления: ");
+                int taskId = scanner.nextInt();
+                scanner.nextLine();
+                taskManager.deleteTask(taskId);
+                System.out.println("Задача удалена.");
+                break;
+            case 2:
+                System.out.print("Введите ID для удаления: ");
+                int epicId = scanner.nextInt();
+                scanner.nextLine();
+                taskManager.deleteEpic(epicId);
+                System.out.println("Эпик удален.");
+                break;
+            case 3:
+                System.out.print("Введите ID для удаления: ");
+                int subtaskId = scanner.nextInt();
+                scanner.nextLine();
+                taskManager.deleteSubtask(subtaskId);
+                System.out.println("Подзадача удалена.");
+                break;
+            case 4:
+                taskManager.deleteAllTasks();
+                System.out.println("Все задачи, эпики и подзадачи удалены.");
+                break;
+            default:
+                System.out.println("Неверный выбор. Попробуйте снова.");
         }
     }
 
@@ -122,7 +166,7 @@ public class Main {
         Task task = null;
         switch (typeChoice) {
             case 1:
-                task = new Task(name, description, status);
+                task = new Task(name, description, status, TaskType.TASK);
                 break;
             case 2:
                 task = new Epic(name, description, status);
@@ -250,7 +294,7 @@ public class Main {
         } else if (oldTask instanceof Subtask) {
             newTask = new Subtask(name, description, status, ((Subtask) oldTask).getEpicId());
         } else {
-            newTask = new Task(name, description, status);
+            newTask = new Task(name, description, status, TaskType.TASK);
         }
         newTask.setId(taskId);
 

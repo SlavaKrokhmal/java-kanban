@@ -1,3 +1,12 @@
+package manager;
+
+import model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Status;
+import history.HistoryManager;
+import factory.Managers;
+
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -97,15 +106,33 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTask(int id) {
-        if (tasks.remove(id) != null || subtasks.remove(id) != null || epics.remove(id) != null) {
+        if (tasks.containsKey(id)) {
+            tasks.remove(id);
             historyManager.remove(id);
         }
+    }
+
+    @Override
+    public void deleteEpic(int id) {
         if (epics.containsKey(id)) {
             Epic epic = epics.remove(id);
             for (Subtask subtask : epic.getSubtasks()) {
                 subtasks.remove(subtask.getId());
                 historyManager.remove(subtask.getId());
             }
+            historyManager.remove(id);
+        }
+    }
+
+    @Override
+    public void deleteSubtask(int id) {
+        if (subtasks.containsKey(id)) {
+            Subtask subtask = subtasks.remove(id);
+            Epic epic = epics.get(subtask.getEpicId());
+            if (epic != null) {
+                epic.removeSubtask(subtask);
+            }
+            historyManager.remove(id);
         }
     }
 
