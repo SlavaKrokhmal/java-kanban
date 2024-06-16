@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Objects;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Task {
     private String name;
@@ -8,16 +10,40 @@ public class Task {
     private int id;
     private Status status;
     private TaskType type;
+    private LocalDateTime startTime;
+    private Duration duration;
 
-    public Task(String name, String description, Status status, TaskType type) {
+    public Task(String name, String description, Status status, TaskType type, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.type = type;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public TaskType getType() {
         return type;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 
     public int getId() {
@@ -67,9 +93,14 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Задача{id=" + id + ", имя='" + name + '\'' +
+        String startTimeStr = (startTime != null) ? startTime.toString() : "не установлено";
+        String durationStr = (duration != null) ? duration.toMinutes() + " минут" : "не установлено";
+        return "Задача{id=" + id +
+                ", имя='" + name + '\'' +
                 ", описание='" + description + '\'' +
                 ", статус=" + status +
+                ", начало задачи=" + startTimeStr +
+                ", продолжительность задачи=" + durationStr +
                 '}';
     }
 }
