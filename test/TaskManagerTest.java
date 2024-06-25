@@ -1,9 +1,8 @@
 import java.util.*;
 import manager.TaskManager;
-import manager.FileBackedTaskManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import model.Status;
@@ -30,7 +29,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Duration duration = Duration.ofHours(1);
         Task task = new Task("Задача", "Описание", Status.NEW, TaskType.TASK, startTime, duration);
         taskManager.createTask(task);
-        assertNotNull(taskManager.getTask(task.getId()));
+        Assertions.assertNotNull(taskManager.getTask(task.getId()));
     }
 
     @Test
@@ -41,7 +40,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.createTask(task);
         task.setName("Новое название");
         taskManager.updateTask(task);
-        assertEquals("Новое название", taskManager.getTask(task.getId()).getName());
+        Assertions.assertEquals("Новое название", taskManager.getTask(task.getId()).getName());
     }
 
     @Test
@@ -50,9 +49,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Duration duration = Duration.ofHours(1);
         Task task = new Task("На удаление", "Описание", Status.NEW, TaskType.TASK, startTime, duration);
         taskManager.createTask(task);
-        assertNotNull(taskManager.getTask(task.getId()));
+        Assertions.assertNotNull(taskManager.getTask(task.getId()));
         taskManager.deleteTask(task.getId());
-        assertNull(taskManager.getTask(task.getId()));
+        Assertions.assertNull(taskManager.getTask(task.getId()));
     }
 
     @Test
@@ -65,7 +64,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Duration duration2 = Duration.ofHours(1);
         taskManager.createTask(new Task("Задача2", "Описание", Status.NEW, TaskType.TASK, startTime2, duration2));
 
-        assertEquals(2, taskManager.getAllTasks().size());
+        Assertions.assertEquals(2, taskManager.getAllTasks().size());
     }
 
     @Test
@@ -83,9 +82,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         }
 
         Epic updatedEpic = (Epic) taskManager.getEpic(epic.getId());
-        assertNotNull(updatedEpic.getStartTime(), "Время начала эпика должно быть установлено");
-        assertEquals(startTime, updatedEpic.getStartTime(), "Время начала эпика должно соответствовать времени начала подзадачи");
-        assertEquals(duration, updatedEpic.getDuration(), "Длительность эпика должна соответствовать длительности подзадачи");
+        Assertions.assertNotNull(updatedEpic.getStartTime(), "Время начала эпика должно быть установлено");
+        Assertions.assertEquals(startTime, updatedEpic.getStartTime(), "Время начала эпика должно соответствовать времени начала подзадачи");
+        Assertions.assertEquals(duration, updatedEpic.getDuration(), "Длительность эпика должна соответствовать длительности подзадачи");
     }
 
     @Test
@@ -95,7 +94,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.createTask(task1);
 
         Task task2 = new Task("Задача 2", "Описание", Status.NEW, TaskType.TASK, startTime.plusHours(1), Duration.ofHours(2));
-        assertThrows(ManagerSaveException.class, () -> taskManager.createTask(task2), "Должно быть исключение из-за пересечения времени выполнения");
+        Assertions.assertThrows(ManagerSaveException.class, () -> taskManager.createTask(task2), "Должно быть исключение из-за пересечения времени выполнения");
     }
 
     @Test
@@ -107,8 +106,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.createTask(task2);
 
         List<Task> tasks = taskManager.getPrioritizedTasks();
-        assertEquals(task2.getId(), tasks.get(0).getId());
-        assertEquals(task1.getId(), tasks.get(1).getId());
+        Assertions.assertEquals(task2.getId(), tasks.get(0).getId());
+        Assertions.assertEquals(task1.getId(), tasks.get(1).getId());
     }
 
     @Test
@@ -118,6 +117,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.getTask(task.getId());
 
         List<Task> history = taskManager.getHistory();
-        assertTrue(history.contains(task));
+        Assertions.assertTrue(history.contains(task));
     }
 }

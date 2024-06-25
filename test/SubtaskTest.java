@@ -1,7 +1,7 @@
-import static org.junit.jupiter.api.Assertions.*;
 
 import model.Status;
 import model.Subtask;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -17,6 +17,6 @@ class SubtaskTest {
         subtask1.setId(2);
         subtask2.setId(2);
 
-        assertEquals(subtask1, subtask2, "Позадачи с одинаковым id должны быть равны");
+        Assertions.assertEquals(subtask1, subtask2, "Позадачи с одинаковым id должны быть равны");
     }
 }
