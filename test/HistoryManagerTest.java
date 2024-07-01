@@ -3,9 +3,9 @@ import history.HistoryManager;
 import model.Status;
 import model.Task;
 import model.TaskType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.time.Duration;
 
@@ -30,18 +30,18 @@ class HistoryManagerTest {
     @Test
     void addingToHistoryShouldPreservePreviousVersion() {
         historyManager.add(task1);
-        assertEquals(1, historyManager.getHistory().size(), "в истории должна быть 1 задача после добавления");
+        Assertions.assertEquals(1, historyManager.getHistory().size(), "в истории должна быть 1 задача после добавления");
 
         task1.setDescription("обновили описание1");
         historyManager.add(task1);
 
-        assertEquals(1, historyManager.getHistory().size(), "в истории должна остаться 1 задача после добавления.");
+        Assertions.assertEquals(1, historyManager.getHistory().size(), "в истории должна остаться 1 задача после добавления.");
         Task retrievedTask = historyManager.getHistory().get(0);
-        assertEquals("обновили описание1", retrievedTask.getDescription(), "Описание должно быть обновлено.");
+        Assertions.assertEquals("обновили описание1", retrievedTask.getDescription(), "Описание должно быть обновлено.");
 
         historyManager.add(task2);
-        assertEquals(2, historyManager.getHistory().size(), "в истории должна быть 2 задача после добавления второй.");
-        assertEquals(task2, historyManager.getHistory().get(1), "Вторая задача должна равняться добавленной.");
+        Assertions.assertEquals(2, historyManager.getHistory().size(), "в истории должна быть 2 задача после добавления второй.");
+        Assertions.assertEquals(task2, historyManager.getHistory().get(1), "Вторая задача должна равняться добавленной.");
     }
 
     @Test
@@ -49,13 +49,13 @@ class HistoryManagerTest {
         historyManager.add(task1);
         historyManager.add(task2);
         historyManager.remove(task1.getId());
-        assertFalse(historyManager.getHistory().contains(task1), "Задача 1 должна быть удалена из истории.");
-        assertTrue(historyManager.getHistory().contains(task2), "Задача 2 должна оставаться в истории.");
+        Assertions.assertFalse(historyManager.getHistory().contains(task1), "Задача 1 должна быть удалена из истории.");
+        Assertions.assertTrue(historyManager.getHistory().contains(task2), "Задача 2 должна оставаться в истории.");
     }
 
     @Test
     void accessingEmptyHistoryShouldReturnEmptyList() {
-        assertTrue(historyManager.getHistory().isEmpty(), "Доступ к пустой истории должен возвращать пустой список.");
+        Assertions.assertTrue(historyManager.getHistory().isEmpty(), "Доступ к пустой истории должен возвращать пустой список.");
     }
 
 

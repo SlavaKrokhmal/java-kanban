@@ -1,4 +1,4 @@
-package main;
+package handlers;
 
 import manager.FileBackedTaskManager;
 import manager.InMemoryTaskManager;
@@ -8,24 +8,40 @@ import model.Subtask;
 import model.Task;
 import model.TaskType;
 import model.Status;
-
-
+import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
 
-
-public class Main {
+public class HttpTaskServer {
     private static final Scanner scanner = new Scanner(System.in);
-    private static TaskManager taskManager = new InMemoryTaskManager();
+    private static final int PORT = 8080;
+    private TaskManager taskManager = new InMemoryTaskManager();
+    private HttpServer server;
 
-
-    public static void main(String[] args) {
-        printMenu();
+    public static void main(String[] args) throws IOException {
+        HttpTaskServer httpTaskServer = new HttpTaskServer();
+        httpTaskServer.startServer();
+        httpTaskServer.printMenu();
     }
 
-    private static void printMenu() {
+    public void startServer() throws IOException {
+        server = HttpServer.create(new InetSocketAddress(PORT), 0);
+
+        server.createContext("/tasks", new TasksHandler(taskManager));
+        server.createContext("/subtasks", new SubtasksHandler(taskManager));
+        server.createContext("/epics", new EpicsHandler(taskManager));
+        server.createContext("/history", new HistoryHandler(taskManager));
+        server.createContext("/prioritized", new PrioritizedTasksHandler(taskManager));
+
+        server.start();
+        System.out.println("Сервер 'слушает' порт " + PORT);
+    }
+
+    private void printMenu() {
         while (true) {
             System.out.println("\n===== Проверочное меню =====");
             System.out.println("1 - Создать задачу");
@@ -69,6 +85,7 @@ public class Main {
                     loadTasksFromFile();
                     break;
                 case 0:
+                    stop();
                     System.out.println("Программа завершена.");
                     return;
                 default:
@@ -77,7 +94,14 @@ public class Main {
         }
     }
 
-    private static void printTaskHistory() {
+    private void stop() {
+        if (server != null) {
+            server.stop(0);
+            System.out.println("Сервер остановлен.");
+        }
+    }
+
+    private void printTaskHistory() {
         List<Task> history = taskManager.getHistory();
         if (history.isEmpty()) {
             System.out.println("История просмотров задач пуста.");
@@ -89,7 +113,7 @@ public class Main {
         }
     }
 
-    private static void loadTasksFromFile() {
+    private void loadTasksFromFile() {
         try {
             taskManager = new FileBackedTaskManager();
             System.out.println("Задачи успешно загружены из файла.");
@@ -98,7 +122,7 @@ public class Main {
         }
     }
 
-    private static void deleteTaskMenu() {
+    private void deleteTaskMenu() {
         System.out.println("Какую задачу вы хотите удалить?");
         System.out.println("1 - Удалить задачу по id");
         System.out.println("2 - Удалить эпик по id");
@@ -140,7 +164,7 @@ public class Main {
         }
     }
 
-    private static void createTask() {
+    private void createTask() {
         System.out.println("Выберите тип задачи:");
         System.out.println("1 - Обычная задача");
         System.out.println("2 - Эпик");
@@ -208,7 +232,7 @@ public class Main {
         }
     }
 
-    private static void printAllTasks() {
+    private void printAllTasks() {
         System.out.println("Какую задачу вы хотите вывести?");
         System.out.println("1 - Вывести список всех задач, эпиков и подзадач по приоритету (время начала)");
         System.out.println("2 - Вывести задачу по ID");
@@ -267,7 +291,7 @@ public class Main {
         }
     }
 
-    private static void manageTaskStatus() {
+    private void manageTaskStatus() {
         System.out.print("Введите идентификатор задачи для обновления статуса: ");
         int taskId = Integer.parseInt(scanner.nextLine());
 
@@ -291,7 +315,7 @@ public class Main {
         System.out.println("Статус задачи успешно обновлен.");
     }
 
-    private static void updateTaskById() {
+    private void updateTaskById() {
         System.out.print("Введите идентификатор задачи для обновления: ");
         int taskId = Integer.parseInt(scanner.nextLine());
 
@@ -330,7 +354,7 @@ public class Main {
         System.out.println("Задача успешно обновлена.");
     }
 
-    private static void deleteTask() {
+    private void deleteTask() {
         System.out.print("Введите идентификатор задачи для удаления: ");
         int taskId = Integer.parseInt(scanner.nextLine());
 

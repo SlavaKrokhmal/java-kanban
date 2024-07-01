@@ -1,4 +1,3 @@
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.time.Duration;
@@ -6,6 +5,7 @@ import java.time.Duration;
 import model.Epic;
 import model.Status;
 import model.Subtask;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 class EpicTest {
 
@@ -21,7 +21,7 @@ class EpicTest {
         try {
             epic.addSubtask(subtask);
         } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage().contains("Эпик не может быть добавлен в себя"));
+            Assertions.assertTrue(e.getMessage().contains("Эпик не может быть добавлен в себя"));
         }
     }
     @Test
@@ -31,7 +31,7 @@ class EpicTest {
         epic1.setId(3);
         epic2.setId(3);
 
-        assertEquals(epic1, epic2, "Эпики с одинаковым id должны быть равны");
+        Assertions.assertEquals(epic1, epic2, "Эпики с одинаковым id должны быть равны");
     }
 
 }

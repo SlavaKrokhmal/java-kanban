@@ -1,12 +1,11 @@
 import model.Status;
 import model.Task;
 import model.TaskType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
 
@@ -19,7 +18,7 @@ class TaskTest {
         task1.setId(1);
         task2.setId(1);
 
-        assertEquals(task1, task2, "Задачи с одинаковым id должны быть равны");
+        Assertions.assertEquals(task1, task2, "Задачи с одинаковым id должны быть равны");
     }
 
 
@@ -34,6 +33,6 @@ class TaskTest {
         task1.setId(1);
         task2.setId(2);
 
-        assertNotEquals(task1, task2, "Задачи с одинаковым id не должны быть равны");
+        Assertions.assertNotEquals(task1, task2, "Задачи с одинаковым id не должны быть равны");
     }
 }
